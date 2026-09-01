@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- 定义一个唯一的 Key，我们在代码中会用到它 -->
+  <RimTalk.DisplayOptimization.AdvancedGuide><![CDATA[This mod adds {{ soul_rules }} to RimTalk's original Dialogue Prompt by default, and adds {{ text_rules }} to Json format,
+##If you change the names of the two entries above, or use your own custom entries, the mod's functionality will cease to work
+
+If you wish to continue using this mod's preset prompts, you can manually add {{ soul_rules }} and {{ text_rules }} in the appropriate places within your own entries
+
+Below is the impact of mod options on the preset prompts
+{{ soul_rules }}:If "Enable Inner Voice Mode" is unchecked, or "Color Only Mode" is enabled, {{ soul_rules }} will no longer be added to RimTalk's original Dialogue Prompt entry, and previously added ones will be deleted. No prompts regarding inner thoughts will be sent to the AI, but {{ soul_rules }} manually added by you in other entries will remain valid
+Preset prompt content:
+[Cognitive Wall]: Pawns cannot perceive Inner Monologue in {s.SymThoughtL}{s.SymThoughtR}. Their actions, dialogue, and attitudes must be based solely on actions in {s.SymActionL}{s.SymActionR} and spoken dialogue, and they must accept these surface interactions as truth.
+
+[State Separation]: Pawns must maintain “/State Separation”/—even if talking within {s.SymThoughtL} {s.SymThoughtR} to the Soul-Reader, their public persona and actions towards other pawns must remain perfectly in-character. If a Soul-Reader blurs a secret publicly, pawns must act shocked, confused, or defensive.  (This section triggers only when a "Soul Reader" is present in the dialogue or the player speaks proactively, and is sent for the number of turns defined in mod settings after triggering)
+## The User watches from shadows. You MUST show Inner Monologue in {s.SymThoughtL}{s.SymThoughtR} in every dialogue for him. ##
+
+{{ text_rules }}:Added to the Json format entry by default, but its content will be affected by this mod's setting options
+Preset prompt content:
+""text"":
+- Wrap the Action in {s.SymActionL} {s.SymActionR}.  (turn off 'action coloring', this message will be deleted) ...
+- Wrap the Inner Monologue in {s.SymThoughtL} {s.SymThoughtR}  (This line will be removed if the Inner Voice System is disabled in settings)
+- Wrap every mention of a person (name, nickname or title) in single Pipe. like |name|  (Sent periodically based on settings; this line will be removed if 'Name Highlighting' is disabled in settings)
+- Wrap core keywords and emotional emphasis in double asterisks. like **hate** ,but each sentence must not exceed three pairs (Sent periodically based on settings; this line will be removed if 'Emphasis Highlighting' is disabled in settings)
+(The content above will be sent continuously for the first 3 turns after loading the game)
+
+Turn counter variable:
+rt_total:Starts from 0, records the current dialogue turn count, outputs a number
+Usage:
+{{ if (rt_total < 3) || (rt_total % 2 == 0) }}
+Content or logic
+{{ end }}
+(Achieves sending content for the first three turns upon loading, then sending content once every two turns)
+
+{{ if rt_total % 4 == 0 }}
+Content 1
+{{ end }}
+{{ if rt_total % 4 == 1 }}
+Content 2
+{{ end }}
+{{ if rt_total % 4 == 2 }}
+Content 3
+{{ end }}
+{{ if rt_total % 4 == 3 }}
+Content 4
+{{ end }}
+(This can implement things like rotating vocabulary injection to reduce token consumption)
+(Actually, these could probably be implemented directly via code, but this way should be more convenient, right?)]]></RimTalk.DisplayOptimization.AdvancedGuide>
+
+</LanguageData>

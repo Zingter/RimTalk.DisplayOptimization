@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- 定义一个唯一的 Key，我们在代码中会用到它 -->
+  <RimTalk.DisplayOptimization.AdvancedGuide><![CDATA[本mod默认会在rimtalk原本的Dialogue Prompt中加入{{ soul_rules }}，Json format中加入{{ text_rules }}，
+
+#＃如果你改变上面两个条目的名字，或者使用自己建立的条目，那mod的功能便会失效
+如果你想继续使用本mod预制提示词，可以在你自己条目的合适位置手动加上{{ soul_rules }}和{{ text_rules }}
+
+下面是对于mod选项对于预制提示词的影响
+{{ soul_rules }}：如果将“启用心声模式”叉掉，或者将“仅涂色模式”开启，则会使{{ soul_rules }}不再添加到rimtalk原有的Dialogue Prompt条目中，以前添加的也会一并删除，不再给ai发送任何有关于心声的提示词，但你手动在其他条目中添加的{{ soul_rules }}仍然有效
+预制提示词内容：
+[Cognitive Wall]: Pawns cannot perceive Inner Monologue in {s.SymThoughtL}{s.SymThoughtR}. Their actions, dialogue, and attitudes must be based solely on actions in {s.SymActionL}{s.SymActionR} and spoken dialogue, and they must accept these surface interactions as truth.
+
+[State Separation]: Pawns must maintain “/State Separation”/—even if talking within {s.SymThoughtL} {s.SymThoughtR} to the Soul-Reader, their public persona and actions towards other pawns must remain perfectly in-character. If a Soul-Reader blurs a secret publicly, pawns must act shocked, confused, or defensive.  （此段内容仅在对话中存在“读心者”或者玩家主动发言时触发，且触发后持续mod设置轮次发送）
+
+## The User watches from shadows. You MUST show Inner Monologue in {s.SymThoughtL}{s.SymThoughtR} in every dialogue for him.
+
+
+{{ text_rules }}：默认会一直加到Json format条目中，但其内容会被本mod的设置选项影响
+预制提示词内容：
+""text"":
+- Wrap the Action in {s.SymActionL} {s.SymActionR}.  （会一直正常发送，关闭“动作染色”，此条会删除）
+- Wrap the Inner Monologue in {s.SymThoughtL} {s.SymThoughtR}  （##如果在设置中关闭心声系统，此条会删除##）
+- Wrap every mention of a person (name, nickname or title) in single Pipe. like |name|  （会按设置隔轮发送；如果在设置中关闭“名字高亮”，此条会删除）
+- Wrap core keywords and emotional emphasis in double asterisks. like **hate** ,but each sentence must not exceed three pairs （会按设定隔轮发送；如果在设置中关闭“重点高亮”，此条会删除）
+（上面这些内容会读档前3轮持续发送）
+
+轮次计数变量：
+rt_total：从0开始，记录当前对话轮次数，输出数字
+
+用法：
+{{ if (rt_total < 3) || (rt_total % 2 == 0) }}
+内容或者逻辑
+{{ end }}
+（实现读档时前三轮必发送内容，然后每两轮发送一次内容）
+
+{{ if rt_total % 4 == 0 }}
+内容1
+{{ end }}
+{{ if rt_total % 4 == 1 }}
+内容2
+{{ end }}
+{{ if rt_total % 4 == 2 }}
+内容3
+{{ end }}
+{{ if rt_total % 4 == 3 }}
+内容4
+{{ end }}
+（这个可以实现比如词库轮次注入，减少token消耗）
+
+（实际上这些似乎可以直接用代码来实现，不过我这个应该可以更方便，吧？）]]></RimTalk.DisplayOptimization.AdvancedGuide>
+
+</LanguageData>

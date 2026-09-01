@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <TraitDef>
+    <defName>RimTalk_MindReader</defName>
+    <commonality>0.05</commonality>
+        <degreeDatas>
+            <li>
+                <label>Mind Reader</label>
+                <description>{PAWN_nameDef} was gazed upon by an unknown entity and gained the ability to read minds. {PAWN_pronoun} can perceive the inner thoughts of others during conversations.</description>
+                <skillGains>
+                    <Social>8</Social>      
+                </skillGains>
+                <statOffsets>
+                    <TradePriceImprovement>0.15</TradePriceImprovement>
+                    <NegotiationAbility>0.20</NegotiationAbility>
+                    <PsychicSensitivity>0.50</PsychicSensitivity>
+                    <ArrestSuccessChance>0.20</ArrestSuccessChance>
+                    <MentalBreakThreshold>-0.05</MentalBreakThreshold>
+                </statOffsets>
+
+                <statFactors>
+                    <CertaintyLossFactor MayRequire="Ludeon.RimWorld.Ideology">0.5</CertaintyLossFactor>
+                </statFactors>
+            </li>
+        </degreeDatas>
+  </TraitDef>
+</Defs>

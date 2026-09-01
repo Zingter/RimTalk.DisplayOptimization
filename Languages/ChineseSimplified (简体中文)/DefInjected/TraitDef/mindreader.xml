@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: <color=#FF0000>Mind Reader</color> -->
+  <RimTalk_MindReader.degreeDatas.Mind_Reader.label>读心者</RimTalk_MindReader.degreeDatas.Mind_Reader.label>
+  <!-- EN: {PAWN_nameDef} was gazed upon by an unknown entity and gained the ability to read minds. {PAWN_pronoun} can perceive the inner thoughts of others during conversations. -->
+  <RimTalk_MindReader.degreeDatas.Mind_Reader.description>{PAWN_nameDef}只是被未知存在注视了一下便获得了读心的能力，{PAWN_pronoun}可以在对话中读取他人内心所想的内容。</RimTalk_MindReader.degreeDatas.Mind_Reader.description>
+  
+</LanguageData>

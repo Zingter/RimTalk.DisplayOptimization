@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  编译前的必改配置 / Configure these before building：
+  1. 把本文件复制为同目录下的 Directory.Build.props
+     Copy this file to Directory.Build.props (same folder).
+  2. 把下面 3 个路径改成你自己电脑上的实际路径
+     Change the 3 paths below to your own install locations.
+
+  本文件只是示例，不会被编译。/ This file is only an example and is not compiled.
+-->
+<Project>
+  <PropertyGroup>
+    <!-- RimWorld 游戏安装目录（其下应含 RimWorldWin64_Data\Managed）
+         RimWorld game folder (should contain RimWorldWin64_Data\Managed) -->
+    <RimWorldDir>C:\Program Files (x86)\Steam\steamapps\common\RimWorld</RimWorldDir>
+
+    <!-- RimTalk 模组目录（创意工坊 3551203752）
+         RimTalk mod folder (Workshop 3551203752) -->
+    <RimTalkDir>C:\Program Files (x86)\Steam\steamapps\workshop\content\294100\3551203752\1.6</RimTalkDir>
+
+    <!-- Harmony 模组目录（创意工坊 2009463077）
+         Harmony mod folder (Workshop 2009463077) -->
+    <HarmonyDir>C:\Program Files (x86)\Steam\steamapps\workshop\content\294100\2009463077\Current</HarmonyDir>
+  </PropertyGroup>
+</Project>
