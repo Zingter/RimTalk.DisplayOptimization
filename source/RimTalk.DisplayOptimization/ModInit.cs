@@ -661,10 +661,11 @@ public static bool Prefix()
     if (!s.EnableFailsafePusher) return true;
 
     float now = Time.realtimeSinceStartup;
-    // 【根因修复】：0.15s 节流只让“调度器自己”放慢，绝不能吞掉 RimTalk 原版 DisplayTalk，
-    // 否则对话生成后永远无人消费 → 调试窗口大量 Pending/Ignored、气泡不显示。
-    // 因此这里改回放行原版（return true），调度器想说话时在下方主动 return false 抢占。
-    if (now - lastGlobalProcessTime < 0.15f) return true;
+    // 【第一句延迟修复】：0.15s 节流窗口内必须吞掉 RimTalk 原版 DisplayTalk（return false），
+    // 否则原版会以自己的 replyInterval 门槛（TalkService.DisplayTalk）压住“第一句话”，
+    // 表现为：句子早已生成，却先只显示名字/空白，等几秒（回复间隔）内容才出现。
+    // 由调度器全权接管弹气泡后，第一句立即说出，不再受原版 replyInterval 延迟。
+    if (now - lastGlobalProcessTime < 0.15f) return false;
     lastGlobalProcessTime = now;
 
     // 【根因修复】：ShouldBlockTalk（窗口避让/暂停避让）只表示“调度器不主动接管”，
@@ -738,6 +739,13 @@ public static bool Prefix()
     {
         // 基础防御检查
         if (log == null) continue;
+
+        // 【关键修复】：Response == null 表示该日志还在“正在生成”（AI 尚未返回内容）。
+        // 旧代码只判断 SpokenTick == 0，会把这种请求日志也当成“待说”提前消费，
+        // 并写入 SpokenTick → Overlay 提前显示“只有名字、内容空白”的空行；
+        // 等 AI 真正生成完（Response 被填充）同一行才出现内容，看起来就像“先空等几秒”。
+        // 因此必须排除 Response == null 的日志，只有已生成完的才能被调度说出。
+        if (log.Response == null) continue;
 
         // 核心逻辑：
         // 1. SpokenTick == 0 表示该消息尚未被调度系统“说出”
@@ -905,7 +913,17 @@ public static bool Prefix()
         {
 if (!isPlayer)
             {
-                // 如果这是 NPC，调用 RimTalk 原生方法弹气泡
+                // 【问题修复】：RimTalk 新版的 CreateInteraction → GetTalk → ConsumeTalk
+                // 只会取 TalkResponses 的“队首第一条”作为气泡文本，与传入的 Talk 无关。
+                // 当队列里存在多条/顺序错乱时，气泡会取到别的条目（表现为：第一句话
+                // 只显示名字、内容空白，等回复间隔（replyInterval）过后才补出正确内容）。
+                // 因此弹气泡前必须把本条 item.Talk 提到该 Pawn 的队首，确保取到正确内容。
+                if (item.State != null && item.State.TalkResponses.Count > 0 &&
+                    item.State.TalkResponses[0] != item.Talk)
+                {
+                    item.State.TalkResponses.Remove(item.Talk);
+                    item.State.TalkResponses.Insert(0, item.Talk);
+                }
                 // 【掉帧优化】：使用静态缓存的 MethodInfo，不再每次气泡反射查找 CreateInteraction
                 createInteractionMethod?.Invoke(null, new object[] { item.Pawn, item.Talk });
             }
